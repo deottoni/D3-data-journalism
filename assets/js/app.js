@@ -24,18 +24,4 @@ const svg = d3
 const chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-  // Initial Params
-const chosenXAxis = "../data/data.csv";
-
-// function used for updating x-scale const upon click on axis label
-function xScale(hairData, chosenXAxis) {
-  // create scales
-  const xLinearScale = d3.scaleLinear()
-    .domain([d3.min(hairData, d => d[chosenXAxis]) * 0.8,
-      d3.max(hairData, d => d[chosenXAxis]) * 1.2
-    ])
-    .range([0, width]);
-
-  return xLinearScale;
-
-}
+d3.csv("../../data.csv");
