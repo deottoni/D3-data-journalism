@@ -26,13 +26,8 @@ const svg = d3
 const chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-// const newsData = d3.csv("assets/data/data.csv");
-// console.log(newsData)
 
-
-
-
-
+// read csv data and store on a variable
 d3.csv("/assets/data/data.csv").then(function(newsData) {
     
   newsData.forEach(function(data) {
@@ -42,13 +37,13 @@ d3.csv("/assets/data/data.csv").then(function(newsData) {
   });
 
 
-  // set xscale function
+  // xscale function
   let xLinearScale = d3.scaleLinear()
       .domain([d3.min(newsData, d=>d.obesity)*0.8, 
           d3.max(newsData, d => d.obesity)*1.2])
       .range([0, width]);
 
-  // set yscale function
+  // yscale function
   let yLinearScale = d3.scaleLinear()
       .domain([0, d3.max(newsData, d => d.income)*1.2])
       .range([height, 0]);
@@ -68,18 +63,18 @@ d3.csv("/assets/data/data.csv").then(function(newsData) {
       .style("font-size", "18px")
       .call(leftAxis);
 
-  // append circles to svg element
-  chartGroup.selectAll("circle")
+  // append circles to svg
+  const circlesGroup = chartGroup.selectAll("circle")
       .data(newsData)
       .enter()
       .append("circle")
       .attr("cx", d => xLinearScale(d.obesity))
       .attr("cy", d => yLinearScale(d.income))
-      .attr("r", 15)
+      .attr("r", 12)
       .attr("fill", "blue")
       .attr("opacity", ".2");
 
-  // add state abbreviations to circles
+  // add abbr to circles
   chartGroup.selectAll("text.text-circles")
       .data(newsData)
       .enter()
@@ -90,7 +85,7 @@ d3.csv("/assets/data/data.csv").then(function(newsData) {
       .attr("y", d => yLinearScale(d.income))
       .attr("dy",5)
       .attr("text-anchor","middle")
-      .attr("font-size","12px");
+      .attr("font-size","10px");
 
 
   // x axis
@@ -112,33 +107,29 @@ d3.csv("/assets/data/data.csv").then(function(newsData) {
 
 
 
-// // gridlines in x axis function
-// function make_x_gridlines() {		
-//   return d3.axisBottom(xLinearScale)
-//       .ticks(5)
-// }
 
-// // gridlines in y axis function
-// function make_y_gridlines() {		
-//   return d3.axisLeft(yLinearScale)
-//       .ticks(5)
-// }
-//   // add the X gridlines
-//   svg.append("g")			
-//   .attr("class", "grid")
-//   .attr("transform", `translate(0, ${height})`)
-//   .call(make_x_gridlines()
-//       .tickSize(-height)
-//       .tickFormat("")
-//   )
+  // initialize Tooltip
+  const toolTip = d3.tip()
+    .attr("class", "tooltip")
+    .offset([0, 0])
+    .html(function(d) {
+      return (`<strong>${d.state}</strong>
+      <br>
+      <br>Income: ${d.income}
+      <br> Obesity: ${d.obesity}
+      <br> Poverty: ${d.poverty}`);
+    });
 
-// // add the Y gridlines
-// svg.append("g")			
-//   .attr("class", "grid")
-//   .call(make_y_gridlines()
-//       .tickSize(-width)
-//       .tickFormat("")
-//   )
+  // add tooltip to chartGroup
+  chartGroup.call(toolTip);   
 
+  // add "mouseover" event listener to  tooltip
+  circlesGroup.on("mouseover", function(d) {
+    toolTip.show(d, this);
+  })
+  // add "mouseout" event listener to hide tooltip
+    .on("mouseout", function(d) {
+      toolTip.hide(d);
+      });
 
-});
+})
