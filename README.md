@@ -13,9 +13,9 @@
 
 ### Level 1: D3 Dabbler
 
-I've created a scatter plot between two of the data variables, `Obesity vs. Poverty`.
+I've created a plot between two of the data variables, `Obesity vs. Poverty` using a dataset provided.
 
-Using D3 techniques, I create a scatter plot that represents each state with circle elements. This graphic was coded in the `app.js` file of this repo— using in the data from `data.csv` by using the `d3.csv` function. 
+Using D3 techniques, I created a scatter plot that represents each state with circle elements. This graphic was coded in the `app.js` file of this repo — using in the data from `data.csv` by using the `d3.csv` function. 
 
 * Included state abbreviations in the circles.
 
